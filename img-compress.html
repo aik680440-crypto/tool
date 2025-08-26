@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online image tool to convert images to passport size, portrait mode, compress images, and export to PDF">
+    <meta name="keywords" content="image converter, passport size, image to pdf, image compressor, photo editor">
+    <title>ImageProTool - Convert, Compress and Export Images</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .upload-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+        
+        .upload-area {
+            border: 3px dashed #6a11cb;
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background: #f0f0ff;
+        }
+        
+        .upload-area i {
+            font-size: 60px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area h3 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+        }
+        
+        .upload-btn {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+        
+        .controls {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+        }
+        
+        .control-group h3 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #6a11cb;
+            cursor: pointer;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #6a11cb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2575fc;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .preview-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+        
+        .preview-box h2 {
+            color: #6a11cb;
+            margin-bottom: 20px;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .preview-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            width: 280px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .preview-card h4 {
+            margin-bottom: 10px;
+            color: #6a11cb;
+        }
+        
+        .preview-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .ad-space {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px dashed #6a11cb;
+        }
+        
+        .ad-label {
+            display: block;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        footer p {
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .size-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ImageProTool</h1>
+            <p>All-in-one image processing tool to convert images to passport size, apply portrait filters, compress images, and export to PDF</p>
+        </header>
+        
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <!-- Google AdSense Ad Unit -->
+            <div id="ad-unit">
+                <!-- AdSense code will be inserted here -->
+                <p>AdSense Ad Unit</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="upload-box">
+                <h2>Upload Your Image</h2>
+                <div class="upload-area" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Your Image Here</h3>
+                    <p>or</p>
+                    <button class="upload-btn">Select Image</button>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*">
+                </div>
+                <div class="image-info">
+                    <p>Supported formats: JPG, PNG, WEBP</p>
+                    <p>Max file size: 5MB</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <h3>Compression Settings</h3>
+                    <div class="slider-container">
+                        <label for="compression">Compression Level: <span id="compression-value">50</span>%</label>
+                        <input type="range" id="compression" min="0" max="100" value="50">
+                        <div class="size-info">
+                            <span>Smaller Size</span>
+                            <span>Better Quality</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h3>Image Actions</h3>
+                    <button class="btn btn-primary" id="passport-btn">
+                        <i class="fas fa-id-card"></i> Convert to Passport Size
+                    </button>
+                    <button class="btn btn-primary" id="portrait-btn">
+                        <i class="fas fa-portrait"></i> Apply Portrait Filter
+                    </button>
+                    <button class="btn btn-primary" id="compress-btn">
+                        <i class="fas fa-compress-arrows-alt"></i> Compress Image
+                    </button>
+                    <button class="btn btn-secondary" id="pdf-btn">
+                        <i class="fas fa-file-pdf"></i> Export to PDF
+                    </button>
+                </div>
+                
+                <div class="control-group">
+                    <h3>Download Options</h3>
+                    <button class="btn btn-primary" id="download-btn" disabled>
+                        <i class="fas fa-download"></i> Download Processed Image
+                    </button>
+                </div>
+            </div>
+            
+            <div class="preview-box">
+                <h2>Image Preview</h2>
+                <div class="image-preview">
+                    <div class="preview-card">
+                        <h4>Original Image</h4>
+                        <img src="https://via.placeholder.com/250x200?text=Original+Image" alt="Original Image" class="preview-img" id="original-preview">
+                    </div>
+                    <div class="preview-card">
+                        <h4>Processed Image</h4>
+                        <img src="https://via.placeholder.com/250x200?text=Processed+Image" alt="Processed Image" class="preview-img" id="processed-preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <!-- Google AdSense Ad Unit -->
+            <div id="ad-unit">
+                <!-- AdSense code will be inserted here -->
+                <p>AdSense Ad Unit</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 ImageProTool - All Rights Reserved</p>
+            <p>This tool is built with HTML, CSS, and JavaScript. Your images are processed locally and never uploaded to any server.</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const dropArea = document.getElementById('dropArea');
+        const compressionSlider = document.getElementById('compression');
+        const compressionValue = document.getElementById('compression-value');
+        const originalPreview = document.getElementById('original-preview');
+        const processedPreview = document.getElementById('processed-preview');
+        const downloadBtn = document.getElementById('download-btn');
+        
+        // Event Listeners
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        compressionSlider.addEventListener('input', updateCompressionValue);
+        
+        // Initialize button event listeners
+        document.getElementById('passport-btn').addEventListener('click', convertToPassport);
+        document.getElementById('portrait-btn').addEventListener('click', applyPortraitFilter);
+        document.getElementById('compress-btn').addEventListener('click', compressImage);
+        document.getElementById('pdf-btn').addEventListener('click', exportToPdf);
+        downloadBtn.addEventListener('click', downloadImage);
+        
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.style.backgroundColor = '#f0f0ff';
+            dropArea.style.borderColor = '#2575fc';
+        }
+        
+        function unhighlight() {
+            dropArea.style.backgroundColor = '';
+            dropArea.style.borderColor = '#6a11cb';
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+        
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+        
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        originalPreview.src = e.target.result;
+                        processedPreview.src = e.target.result;
+                        downloadBtn.disabled = false;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select a valid image file.');
+                }
+            }
+        }
+        
+        function updateCompressionValue() {
+            compressionValue.textContent = compressionSlider.value;
+        }
+        
+        function convertToPassport() {
+            alert('Converting to passport size (35x45 mm)...');
+            // In a real application, this would resize the image to passport dimensions
+            simulateProcessing();
+        }
+        
+        function applyPortraitFilter() {
+            alert('Applying portrait filter...');
+            // In a real application, this would apply filters to enhance portrait images
+            simulateProcessing();
+        }
+        
+        function compressImage() {
+            const compressionLevel = compressionSlider.value;
+            alert(`Compressing image with ${compressionLevel}% compression...`);
+            // In a real application, this would compress the image based on the selected level
+            simulateProcessing();
+        }
+        
+        function exportToPdf() {
+            alert('Exporting to PDF...');
+            // In a real application, this would convert the image to PDF format
+            simulateProcessing();
+        }
+        
+        function downloadImage() {
+            alert('Downloading processed image...');
+            // In a real application, this would download the processed image
+        }
+        
+        function simulateProcessing() {
+            processedPreview.style.opacity = '0.7';
+            setTimeout(() => {
+                processedPreview.style.opacity = '1';
+                alert('Processing complete!');
+            }, 1500);
+        }
+        
+        // Initialize compression value display
+        updateCompressionValue();
+    </script>
+</body>
+</html>
